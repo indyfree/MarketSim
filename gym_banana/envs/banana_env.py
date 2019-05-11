@@ -20,8 +20,8 @@ import gym
 import numpy as np
 
 
-path = 'config.yaml'  # always use slash in packages
-filepath = pkg_resources.resource_filename('gym_banana', path)
+path = "config.yaml"  # always use slash in packages
+filepath = pkg_resources.resource_filename("gym_banana", path)
 config = cfg_load.load(filepath)
 logging.config.dictConfig(config['LOGGING'])
 
