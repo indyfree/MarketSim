@@ -1,7 +1,39 @@
-upload:
-	make clean
-	python3 setup.py sdist bdist_wheel && twine upload dist/*
+.PHONY: clean lint requirements venv
+
+#################################################################################
+# GLOBALS                                                                       #
+#################################################################################
+VENV_DIR =  env
+PYTHON_INTERPRETER = $(VENV_DIR)/bin/python3
+PIP = $(VENV_DIR)/bin/pip
+
+#################################################################################
+# COMMANDS                                                                      #
+#################################################################################
+## Install Python Dependencies
+requirements: venv
+	$(PIP) install -U pip setuptools wheel
+	$(PIP) install -e .
+ifneq ($(wildcard ./requirements.txt),)
+	$(PIP) install -r requirements.txt
+endif
+
+## Delete all compiled Python files
 clean:
-	python setup.py clean --all
-	pyclean .
-	rm -rf *.pyc __pycache__ build dist gym_banana.egg-info gym_banana/__pycache__ gym_banana/units/__pycache__ tests/__pycache__ tests/reports docs/build
+	find . -type f -name "*.py[co]" -delete
+	find . -type d -name "__pycache__" -delete
+
+test:
+	$(PYTHON_INTERPRETER) ./tests/test_main.py
+
+## Install virtual environment
+venv:
+ifeq ($(wildcard $(VENV_DIR)/*),)
+	@echo "Did not find $(VENV_DIR), creating..."
+	mkdir -p $(VENV_DIR)
+	python -m venv $(VENV_DIR)
+endif
+
+## Lint using flake8
+lint:
+	@$(PYTHON_INTERPRETER) -m flake8 --config=$(PROJECT_DIR)/.flake8 src
