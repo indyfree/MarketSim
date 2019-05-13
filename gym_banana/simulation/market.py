@@ -8,8 +8,8 @@ class IntradayMarket:
     """
     Simulation of a simplified Intraday Continuous Market trading process.
 
-    Assuming an electricity generator that wants to sell an electricity
-    product within a given lead time in discrete time slots.
+    Taking the role of an electricity generator that wants to sell an
+    electricity product within a given lead time in discrete time slots.
     """
 
     def __init__(self, lead_time=1):
@@ -43,24 +43,28 @@ class IntradayMarket:
 
         Returns
         ------
+        offer_return, is_done : tuple
+
         offer_return (float):
             Return of the offer is 0 EUR if product not sold,
-            and [price] if the product is sold.
+            and [price] in EUR if the product is sold.
         """
         if self.is_sold:
             raise AlreadySoldError("Electricity product already sold")
 
         if self.remaining_slots <= 0:
-            raise LeadtimePassedError("Lead time of electricity product passed")
+            raise LeadtimePassedError("Lead time passed")
 
         succesful_trade = random.random() < self.selling_chance(price)
         self.remaining_slots -= 1
 
         if succesful_trade:
+            offer_return = price
             self.is_sold = True
-            return price
+        else:
+            offer_return = 0
 
-        return 0
+        return (offer_return, self.is_sold)
 
     def selling_chance(self, x):
         """Probability that a banana will be sold at price x."""

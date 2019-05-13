@@ -25,20 +25,24 @@ class Environments(unittest.TestCase):
         market = IntradayMarket(lead_time=1)
 
         # 1. Succesfully sell
-        reward = market.trade_offer(0)
+        reward, sold = market.trade_offer(0)
         self.assertTrue(0 == reward)
+        self.assertTrue(sold)
 
         # 2. Already sold
         market.new_product(lead_time=1)
-        reward = market.trade_offer(0)
+        reward, sold = market.trade_offer(0)
+        self.assertTrue(sold)
         self.assertRaises(AlreadySoldError, market.trade_offer, 0)
         self.assertTrue(0 == reward)
 
         # 3. Not sold in time
         market.new_product(lead_time=2)
-        reward = market.trade_offer(math.inf)
+        reward, sold = market.trade_offer(math.inf)
+        self.assertFalse(sold)
         self.assertTrue(0 == reward)
-        reward = market.trade_offer(math.inf)
+        reward, sold = market.trade_offer(math.inf)
+        self.assertFalse(sold)
         self.assertTrue(0 == reward)
         self.assertRaises(LeadtimePassedError, market.trade_offer, math.inf)
 
