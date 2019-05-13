@@ -5,7 +5,7 @@ import math
 import unittest
 
 # internal modules
-from gym_banana.simulation import AlreadySoldError, LeadtimePassedError, IntradayMarket
+from marketsim.simulation import AlreadySoldError, LeadtimePassedError, IntradayMarket
 
 
 class Environments(unittest.TestCase):

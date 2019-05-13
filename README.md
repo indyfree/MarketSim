@@ -17,7 +17,7 @@ pip install -e .
 
 ```
 import gym
-import gym_banana
+import marketsim
 
 env = gym.make('MarketSim-v0')
 ```

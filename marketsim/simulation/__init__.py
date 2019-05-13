@@ -1,6 +1,6 @@
 # flake8: noqa
 
-from gym_banana.simulation.market import (
+from marketsim.simulation.market import (
     AlreadySoldError,
     LeadtimePassedError,
     IntradayMarket,

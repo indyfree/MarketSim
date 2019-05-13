@@ -12,7 +12,7 @@ from rl.agents.dqn import DQNAgent
 from rl.policy import LinearAnnealedPolicy, EpsGreedyQPolicy
 from rl.memory import SequentialMemory
 
-import gym_banana
+import marketsim
 
 
 def main():
