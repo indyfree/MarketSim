@@ -13,7 +13,7 @@ import gym_banana
 
 class Environments(unittest.TestCase):
     def test_env(self):
-        env = gym.make("Banana-v0")
+        env = gym.make("MarketSim-v0")
         env.seed(123)
         env.observation_space.sample()
         env.action_space.sample()
@@ -21,7 +21,7 @@ class Environments(unittest.TestCase):
         env.step(0)
 
     def test_random_agent(self):
-        env = gym.make("Banana-v0")
+        env = gym.make("MarketSim-v0")
         env.seed(123)
         ob = env.reset()
         print("Init: {} steps left".format(ob[0]))

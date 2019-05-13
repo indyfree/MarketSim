@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-setup(name='gym_banana',
-      version='0.0.1',
-      install_requires=['gym>=0.2.3',
-                        'pandas',
-                        'cfg_load']
-      )
+setup(
+    name="marketsim",
+    version="0.0.1",
+    install_requires=["keras-rl>=0.4.2", "gym>=0.2.3", "pandas>=0.23.4", "cfg_load"],
+)

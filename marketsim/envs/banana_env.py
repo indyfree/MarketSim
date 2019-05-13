@@ -97,7 +97,7 @@ class BananaEnv(gym.Env):
         # TODO: Determine price from action
         price = (float(self.MAX_PRICE) / (self.action_space.n - 1)) * action
 
-        print("Action: bid {:.2f} EUR".format(price))
+        # print("Action: bid {:.2f} EUR".format(price))
         # TODO: Interact with simulation
         reward, sold = self.market.trade_offer(price)
 
