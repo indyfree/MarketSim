@@ -1,15 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-Simulate the simplifie Banana selling environment.
-
-Each episode is selling a single banana.
-"""
 
 # core modules
 import logging.config
-import math
 import pkg_resources
 import random
 
@@ -19,17 +11,14 @@ import cfg_load
 import gym
 import numpy as np
 
+# internal modules
+from gym_banana import simulation
 
-path = "config.yaml"  # always use slash in packages
+# Set up logger
+path = "logger_config.yaml"  # always use slash in packages
 filepath = pkg_resources.resource_filename("gym_banana", path)
 config = cfg_load.load(filepath)
-logging.config.dictConfig(config['LOGGING'])
-
-
-def get_chance(x):
-    """Get probability that a banana will be sold at price x."""
-    e = math.exp(1)
-    return (1.0 + e) / (1. + math.exp(x + 1))
+logging.config.dictConfig(config["LOGGING"])
 
 
 class BananaEnv(gym.Env):
@@ -46,25 +35,23 @@ class BananaEnv(gym.Env):
 
         # General variables defining the environment
         self.MAX_PRICE = 2.0
-        self.TOTAL_TIME_STEPS = 2
+        self.TOTAL_TIME_STEPS = 4
 
-        self.curr_step = -1
-        self.is_banana_sold = False
+        # Simulation
+        self.market = simulation.IntradayMarket(self.TOTAL_TIME_STEPS)
+
+        # Environment state variables
+        self.curr_step = 0
+        self.done = False
 
         # Define what the agent can do
         # Sell at 0.00 EUR, 0.10 Euro, ..., 2.00 Euro
         self.action_space = spaces.Discrete(21)
 
         # Observation is the remaining time
-        low = np.array([0.0,  # remaining_tries
-                        ])
-        high = np.array([self.TOTAL_TIME_STEPS,  # remaining_tries
-                         ])
+        low = np.array([0.0])  # remaining_tries
+        high = np.array([self.TOTAL_TIME_STEPS])  # remaining_tries
         self.observation_space = spaces.Box(low, high, dtype=np.float32)
-
-        # Store what the agent tried
-        self.curr_episode = -1
-        self.action_episode_memory = []
 
     def step(self, action):
         """
@@ -96,38 +83,29 @@ class BananaEnv(gym.Env):
                  However, official evaluations of your agent are not allowed to
                  use this for learning.
         """
-        if self.is_banana_sold:
+        if self.done:
             raise RuntimeError("Episode is done")
+
         self.curr_step += 1
-        self._take_action(action)
-        reward = self._get_reward()
+
+        reward = self._take_action(action)
         ob = self._get_state()
-        return ob, reward, self.is_banana_sold, {}
+
+        return ob, reward, self.done, {}
 
     def _take_action(self, action):
-        self.action_episode_memory[self.curr_episode].append(action)
-        self.price = ((float(self.MAX_PRICE) /
-                      (self.action_space.n - 1)) * action)
+        # TODO: Determine price from action
+        price = (float(self.MAX_PRICE) / (self.action_space.n - 1)) * action
 
-        chance_to_take = get_chance(self.price)
-        banana_is_sold = (random.random() < chance_to_take)
+        print("Action: bid {:.2f} EUR".format(price))
+        # TODO: Interact with simulation
+        reward, sold = self.market.trade_offer(price)
 
-        if banana_is_sold:
-            self.is_banana_sold = True
+        # TODO: When is done?
+        if sold or self.market.remaining_slots == 0:
+            self.done = True
 
-        remaining_steps = self.TOTAL_TIME_STEPS - self.curr_step
-        time_is_over = (remaining_steps <= 0)
-        throw_away = time_is_over and not self.is_banana_sold
-        if throw_away:
-            self.is_banana_sold = True  # abuse this a bit
-            self.price = 0.0
-
-    def _get_reward(self):
-        """Reward is given for a sold banana."""
-        if self.is_banana_sold:
-            return self.price - 1
-        else:
-            return 0.0
+        return reward
 
     def reset(self):
         """
@@ -137,14 +115,12 @@ class BananaEnv(gym.Env):
         -------
         observation (object): the initial observation of the space.
         """
-        self.curr_step = -1
-        self.curr_episode += 1
-        self.action_episode_memory.append([])
-        self.is_banana_sold = False
-        self.price = 1.00
+        self.curr_step = 0
+        self.done = False
+        self.market.new_product()
         return self._get_state()
 
-    def _render(self, mode='human', close=False):
+    def _render(self, mode="human", close=False):
         return
 
     def _get_state(self):
@@ -154,4 +130,4 @@ class BananaEnv(gym.Env):
 
     def seed(self, seed):
         random.seed(seed)
-        np.random.seed
+        np.random.seed(seed)
