@@ -13,8 +13,16 @@ import gym_banana
 
 class Environments(unittest.TestCase):
 
-    def test_env(self):
-        env = gym.make('Banana-v0')
-        env.seed(0)
-        env.reset()
-        env.step(0)
+    def test_probability(self):
+        price = 0
+        self.assertTrue(1 == selling_chance(price))
+
+        price = 1
+        self.assertTrue(0.5 > selling_chance(price))
+
+        price = math.inf
+        self.assertTrue(0 == selling_chance(price))
+
+
+if __name__ == "__main__":
+    unittest.main()
