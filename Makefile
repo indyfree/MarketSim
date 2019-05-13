@@ -36,4 +36,4 @@ endif
 
 ## Lint using flake8
 lint:
-	@$(PYTHON_INTERPRETER) -m flake8 --config=$(PROJECT_DIR)/.flake8 src
+	@$(PYTHON_INTERPRETER) -m flake8 gym_banana
