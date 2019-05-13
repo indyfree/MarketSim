@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 # core modules
+import math
 import unittest
 
 # 3rd party modules
@@ -9,42 +9,49 @@ import gym
 
 # internal modules
 import gym_banana
-from gym_banana import simulation
-from gym_banana.simulation.market import selling_chance
+from gym_banana.simulation import AlreadySoldError, LeadtimePassedError, IntradayMarket
 
 
 class Environments(unittest.TestCase):
+    # def test_env(self):
+    #     env = gym.make("Banana-v0")
+    #     env.seed(0)
+    #     env.reset()
+    #     env.step(0)
+    #     return False
 
     def test_probability(self):
+        market = IntradayMarket()
+
         price = 0
-        self.assertTrue(1 == selling_chance(price))
+        self.assertTrue(1 == market.selling_chance(price))
 
         price = 1
-        self.assertTrue(0.5 > selling_chance(price))
+        self.assertTrue(0.5 > market.selling_chance(price))
 
         price = math.inf
-        self.assertTrue(0 == selling_chance(price))
+        self.assertTrue(0 == market.selling_chance(price))
 
     def test_sim(self):
-        market = simulation.IntradayMarket(slots_ahead=2, max_price=2)
+        market = IntradayMarket(lead_time=1)
 
+        # 1. Succesfully sell
         reward = market.trade_offer(0)
         self.assertTrue(0 == reward)
 
-        self.assertRaises(RuntimeError, market.trade_offer, 0)
-
-        market.reset()
+        # 2. Already sold
+        market.new_product(lead_time=1)
         reward = market.trade_offer(0)
+        self.assertRaises(AlreadySoldError, market.trade_offer, 0)
         self.assertTrue(0 == reward)
 
-        market.reset()
+        # 3. Not sold in time
+        market.new_product(lead_time=2)
         reward = market.trade_offer(math.inf)
         self.assertTrue(0 == reward)
-
         reward = market.trade_offer(math.inf)
         self.assertTrue(0 == reward)
-
-        self.assertRaises(RuntimeError, market.trade_offer, math.inf)
+        self.assertRaises(LeadtimePassedError, market.trade_offer, math.inf)
 
 
 if __name__ == "__main__":
