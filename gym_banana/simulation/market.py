@@ -43,7 +43,7 @@ class IntradayMarket:
 
         Returns
         ------
-        offer_return, is_done : tuple
+        offer_return, is_sold : tuple
 
         offer_return (float):
             Return of the offer is 0 EUR if product not sold,
