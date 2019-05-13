@@ -24,7 +24,7 @@ clean:
 	find . -type d -name "__pycache__" -delete
 
 test:
-	$(PYTHON_INTERPRETER) ./tests/test_main.py
+	@$(PYTHON_INTERPRETER) -W ignore::DeprecationWarning -m unittest -v tests/*.py
 
 ## Install virtual environment
 venv:
