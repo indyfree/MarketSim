@@ -10,6 +10,9 @@ PIP = $(VENV_DIR)/bin/pip
 #################################################################################
 # COMMANDS                                                                      #
 #################################################################################
+all: clean requirements lint test
+
+
 ## Install Python Dependencies
 requirements: venv
 	$(PIP) install -U pip setuptools wheel
@@ -36,5 +39,4 @@ endif
 
 ## Lint using flake8
 lint:
-	@$(PYTHON_INTERPRETER) -m flake8 marketsim
-	@$(PYTHON_INTERPRETER) -m flake8 tests
+	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 marketsim tests
