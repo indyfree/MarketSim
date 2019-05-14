@@ -22,11 +22,12 @@ class Environments(unittest.TestCase):
         self.assertTrue(0 == market.selling_chance(price))
 
     def test_sim(self):
-        market = IntradayMarket(lead_time=1)
+        PRODUCT_PRICE = 1
+        market = IntradayMarket(product_price=PRODUCT_PRICE, lead_time=1)
 
         # 1. Succesfully sell
         reward, sold = market.trade_offer(0)
-        self.assertTrue(0 == reward)
+        self.assertTrue(-PRODUCT_PRICE == reward)
         self.assertTrue(sold)
 
         # 2. Already sold
@@ -34,7 +35,7 @@ class Environments(unittest.TestCase):
         reward, sold = market.trade_offer(0)
         self.assertTrue(sold)
         self.assertRaises(AlreadySoldError, market.trade_offer, 0)
-        self.assertTrue(0 == reward)
+        self.assertTrue(-PRODUCT_PRICE == reward)
 
         # 3. Not sold in time
         market.new_product(lead_time=2)
@@ -43,7 +44,7 @@ class Environments(unittest.TestCase):
         self.assertTrue(0 == reward)
         reward, sold = market.trade_offer(math.inf)
         self.assertFalse(sold)
-        self.assertTrue(0 == reward)
+        self.assertTrue(-PRODUCT_PRICE == reward)
         self.assertRaises(LeadtimePassedError, market.trade_offer, math.inf)
 
 
