@@ -12,11 +12,13 @@ class IntradayMarket:
     electricity product within a given lead time in discrete time slots.
     """
 
-    def __init__(self, lead_time=1):
+    def __init__(self, product_price=1, lead_time=1):
         self.default_lead_time = lead_time
-        self.new_product(lead_time)
+        self.default_product_price = product_price
 
-    def new_product(self, lead_time=None):
+        self.new_product(product_price, lead_time)
+
+    def new_product(self, product_price=None, lead_time=None):
         """
         Create new electricity product with a given lead time
         that we aim to place on the market
@@ -28,10 +30,14 @@ class IntradayMarket:
         """
         self.is_sold = False
 
-        if lead_time is None:
+        if not lead_time:
             lead_time = self.default_lead_time
 
+        if not product_price:
+            product_price = self.default_product_price
+
         self.remaining_slots = lead_time
+        self.product_price = product_price
 
     def trade_offer(self, price):
         """
@@ -43,11 +49,12 @@ class IntradayMarket:
 
         Returns
         ------
-        offer_return, is_sold : tuple
+        profit, is_sold : tuple
 
-        offer_return (float):
-            Return of the offer is 0 EUR if product not sold,
-            and [price] in EUR if the product is sold.
+        profit (float):
+               - 0 if product not sold in current slot.
+               - [price] - [product_price] in EUR if the product is sold.
+               - [product_price] in EUR if lead time passed.
         """
         if self.is_sold:
             raise AlreadySoldError("Electricity product already sold")
@@ -59,12 +66,14 @@ class IntradayMarket:
         self.remaining_slots -= 1
 
         if succesful_trade:
-            offer_return = price
+            profit = price - self.product_price
             self.is_sold = True
+        elif self.remaining_slots == 0:
+            profit = -self.product_price
         else:
-            offer_return = 0
+            profit = 0
 
-        return (offer_return, self.is_sold)
+        return (profit, self.is_sold)
 
     def selling_chance(self, x):
         """Probability that a banana will be sold at price x."""

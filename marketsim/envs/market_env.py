@@ -36,9 +36,12 @@ class MarketEnv(gym.Env):
         # General variables defining the environment
         self.MAX_PRICE = 2.0
         self.TOTAL_TIME_STEPS = 4
+        self.PRODUCT_PRICE = 1
 
         # Simulation
-        self.market = simulation.IntradayMarket(self.TOTAL_TIME_STEPS)
+        self.market = simulation.IntradayMarket(
+            product_price=self.PRODUCT_PRICE, lead_time=self.TOTAL_TIME_STEPS
+        )
 
         # Environment state variables
         self.curr_step = 0
