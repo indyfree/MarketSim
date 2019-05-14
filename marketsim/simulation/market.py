@@ -76,7 +76,7 @@ class IntradayMarket:
         return (profit, self.is_sold)
 
     def selling_chance(self, x):
-        """Probability that a banana will be sold at price x."""
+        """Probability that the product will be sold at price x."""
         return math.exp(-x)
 
 

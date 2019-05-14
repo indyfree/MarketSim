@@ -23,7 +23,7 @@ logging.config.dictConfig(config["LOGGING"])
 
 class MarketEnv(gym.Env):
     """
-    Define a simple Banana environment.
+    Define a simple market environment.
 
     The environment defines which actions can be taken at which point and
     when the agent receives which reward.
