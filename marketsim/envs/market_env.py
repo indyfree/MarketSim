@@ -14,12 +14,6 @@ import numpy as np
 # internal modules
 from marketsim import simulation
 
-# Set up logger
-path = "logger_config.yaml"  # always use slash in packages
-filepath = pkg_resources.resource_filename("marketsim", path)
-config = cfg_load.load(filepath)
-logging.config.dictConfig(config["LOGGING"])
-
 
 class MarketEnv(gym.Env):
     """
@@ -31,7 +25,7 @@ class MarketEnv(gym.Env):
 
     def __init__(self):
         self.__version__ = "0.1.0"
-        logging.info("MarketEnv - Version {}".format(self.__version__))
+        print("MarketEnv - Version {}".format(self.__version__))
 
         # General variables defining the environment
         self.MAX_PRICE = 2.0
