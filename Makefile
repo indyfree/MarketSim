@@ -1,4 +1,4 @@
-.PHONY: clean lint requirements venv
+.PHONY: clean lint requirements venv test
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -27,7 +27,7 @@ clean:
 	find . -type d -name "__pycache__" -delete
 
 test:
-	@$(PYTHON_INTERPRETER) -W ignore::DeprecationWarning -m unittest -v tests/*.py
+	@$(PYTHON_INTERPRETER) -W ignore::DeprecationWarning -m unittest discover --verbose
 
 ## Install virtual environment
 venv:
@@ -39,4 +39,4 @@ endif
 
 ## Lint using flake8
 lint:
-	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 marketsim tests
+	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 marketsim test
