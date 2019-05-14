@@ -37,3 +37,4 @@ endif
 ## Lint using flake8
 lint:
 	@$(PYTHON_INTERPRETER) -m flake8 marketsim
+	@$(PYTHON_INTERPRETER) -m flake8 tests
