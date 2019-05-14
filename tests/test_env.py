@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
 # core modules
-import math
 import unittest
 
 # 3rd party modules
 import gym
 
 # internal modules
-import marketsim
+import marketsim  # noqa: F401
 
 
 class Environments(unittest.TestCase):

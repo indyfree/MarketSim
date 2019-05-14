@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
 # core modules
-import logging.config
-import pkg_resources
 import random
 
 # 3rd party modules
 from gym import spaces
-import cfg_load
 import gym
 import numpy as np
 
