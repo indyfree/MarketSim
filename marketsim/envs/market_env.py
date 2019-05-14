@@ -123,9 +123,6 @@ class MarketEnv(gym.Env):
         self.market.new_product()
         return self._get_state()
 
-    def _render(self, mode="human", close=False):
-        return
-
     def _get_state(self):
         """Get the observation."""
         ob = [self.TOTAL_TIME_STEPS - self.curr_step]
