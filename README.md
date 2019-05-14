@@ -33,7 +33,7 @@ Continous Market shortly before delivery, for example one hour, thats
 4 timeslots of 15-minutes. The generator places trade-offers on the market and
 can update the offered price every timeslot before delivery.
 The probability buyers will buy the electricity product is given by
-$$p(x) = e^(-x))$$
+![equation](https://latex.codecogs.com/svg.latex?p(x)%20=%20e^{-x})
 where x is the offered price by the generator. If the generator can not sell the
 electricity before delivery, the reward is the negative generation costs _z_. If
 the generator succesfully sells the electricity the reward is x - z.
