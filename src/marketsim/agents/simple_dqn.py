@@ -6,6 +6,7 @@ from keras.optimizers import Adam
 
 # from rl.policy import BoltzmannQPolicy
 from rl.agents.dqn import DQNAgent
+from rl.callbacks import FileLogger
 from rl.policy import LinearAnnealedPolicy, EpsGreedyQPolicy
 from rl.memory import SequentialMemory
 
@@ -49,12 +50,20 @@ class SimpleDQN:
 
         self.dqn.compile(Adam(lr=1e-3), metrics=["mae"])
 
-    def train(self, env, steps):
-        self.dqn.fit(env, nb_steps=steps, visualize=False, log_interval=2000, verbose=1)
+    def train(self, env, steps, log_interval=5000):
+        self.dqn.fit(
+            env,
+            callbacks=[FileLogger("dqn_log.json")],
+            log_interval=log_interval,
+            nb_steps=steps,
+            verbose=1,
+            visualize=False,
+        )
 
         # After training is done, we save the final weights.
         self.dqn.save_weights("dqn_weights.h5f", overwrite=True)
 
     def test(self, env, episodes):
         # Finally, evaluate our algorithm for 5 episodes.
+        self.dqn.load_weights("dqn_weights.h5f")
         self.dqn.test(env, nb_episodes=episodes, visualize=False)
