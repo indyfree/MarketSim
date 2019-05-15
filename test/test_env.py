@@ -29,6 +29,7 @@ class Environments(unittest.TestCase):
         for i in range(10):
             print("--- Timestep: {} ----".format(i))
             a = env.action_space.sample()
+            print("Action: No: {}".format(a))
             ob, reward, done, _ = env.step(a)
             cum_reward += reward
             print("Reward: {:.2f} EUR".format(reward))

@@ -21,17 +21,14 @@ class MarketEnv(gym.Env):
     """
 
     def __init__(self):
-        self.__version__ = "0.1.0"
-        print("MarketEnv - Version {}".format(self.__version__))
-
         # General variables defining the environment
         self.MAX_PRICE = 2.0
-        self.TOTAL_TIME_STEPS = 4
+        self.MAX_TIME_STEPS = 4
         self.PRODUCT_PRICE = 1
 
-        # Simulation
+        # Create Simulation with environment parameters
         self.market = simulation.IntradayMarket(
-            product_price=self.PRODUCT_PRICE, lead_time=self.TOTAL_TIME_STEPS
+            product_price=self.PRODUCT_PRICE, lead_time=self.MAX_TIME_STEPS
         )
 
         # Environment state variables
@@ -44,7 +41,7 @@ class MarketEnv(gym.Env):
 
         # Observation is the remaining time
         low = np.array([0.0])  # remaining_tries
-        high = np.array([self.TOTAL_TIME_STEPS])  # remaining_tries
+        high = np.array([self.MAX_TIME_STEPS])  # remaining_tries
         self.observation_space = spaces.Box(low, high, dtype=np.float32)
 
     def step(self, action):
@@ -88,14 +85,13 @@ class MarketEnv(gym.Env):
         return ob, reward, self.done, {}
 
     def _take_action(self, action):
-        # TODO: Determine price from action
+        # Determine price from action
         price = (float(self.MAX_PRICE) / (self.action_space.n - 1)) * action
 
-        # print("Action: bid {:.2f} EUR".format(price))
-        # TODO: Interact with simulation
+        # Interact with simulation
         reward, sold = self.market.trade_offer(price)
 
-        # TODO: When is done?
+        # When is episode done?
         if sold or self.market.remaining_slots == 0:
             self.done = True
 
@@ -116,7 +112,7 @@ class MarketEnv(gym.Env):
 
     def _get_state(self):
         """Get the observation."""
-        ob = [self.TOTAL_TIME_STEPS - self.curr_step]
+        ob = [self.MAX_TIME_STEPS - self.curr_step]
         return ob
 
     def seed(self, seed):
