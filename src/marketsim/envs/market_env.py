@@ -40,8 +40,6 @@ class MarketEnv(gym.Env):
         self.action_space = spaces.Discrete(21)
 
         # Observation is the remaining time
-        # low = np.array([0.0])  # remaining_tries
-        # high = np.array([self.MAX_TIME_STEPS])  # remaining_tries
         self.observation_space = spaces.Discrete(self.MAX_TIME_STEPS + 1)
 
     def step(self, action):
