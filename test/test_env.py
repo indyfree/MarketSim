@@ -38,7 +38,7 @@ class Environments(unittest.TestCase):
                 ob = env.reset()
                 print("Reset: {} steps left".format(ob[0]))
 
-        print("Mean reward {:.2f} EUR".format(cum_reward / 5))
+        print("Mean reward {:.2f} EUR".format(cum_reward / 10))
         print("Total reward {:.2f} EUR".format(cum_reward))
 
 
