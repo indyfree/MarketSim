@@ -20,11 +20,11 @@ clean:
 
 ## Run experiments
 experiment:
-	@$(PYTHON_INTERPRETER) marketsim/experiments/*.py
+	@$(PYTHON_INTERPRETER) ./src/marketsim/experiments/*.py
 
 ## Lint using flake8
 lint:
-	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 marketsim test
+	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 ./src/marketsim ./test
 
 ## Run tests
 test:
