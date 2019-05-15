@@ -1,4 +1,4 @@
-.PHONY: clean lint requirements venv test
+.PHONY: clean experiment lint requirements test venv
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -13,6 +13,23 @@ PIP = $(VENV_DIR)/bin/pip
 all: clean requirements lint test
 
 
+## Delete all compiled Python files
+clean:
+	find . -type f -name "*.py[co]" -delete
+	find . -type d -name "__pycache__" -delete
+
+## Run experiments
+experiment:
+	@$(PYTHON_INTERPRETER) marketsim/experiments/*.py
+
+## Lint using flake8
+lint:
+	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 marketsim test
+
+## Run tests
+test:
+	@$(PYTHON_INTERPRETER) -W ignore::DeprecationWarning -m unittest discover --verbose
+
 ## Install Python Dependencies
 requirements: venv
 	$(PIP) install -U pip setuptools wheel
@@ -21,13 +38,6 @@ ifneq ($(wildcard ./requirements.txt),)
 	$(PIP) install -r requirements.txt
 endif
 
-## Delete all compiled Python files
-clean:
-	find . -type f -name "*.py[co]" -delete
-	find . -type d -name "__pycache__" -delete
-
-test:
-	@$(PYTHON_INTERPRETER) -W ignore::DeprecationWarning -m unittest discover --verbose
 
 ## Install virtual environment
 venv:
@@ -37,6 +47,3 @@ ifeq ($(wildcard $(VENV_DIR)/*),)
 	python -m venv $(VENV_DIR)
 endif
 
-## Lint using flake8
-lint:
-	@$(PYTHON_INTERPRETER) -m flake8 --max-line-length=90 marketsim test
