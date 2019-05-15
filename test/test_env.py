@@ -23,7 +23,7 @@ class Environments(unittest.TestCase):
         env = gym.make("MarketSim-v0")
         env.seed(123)
         ob = env.reset()
-        print("Init: {} steps left".format(ob[0]))
+        print("Init: {} steps left".format(ob))
 
         cum_reward = 0
         for i in range(10):
@@ -33,10 +33,10 @@ class Environments(unittest.TestCase):
             ob, reward, done, _ = env.step(a)
             cum_reward += reward
             print("Reward: {:.2f} EUR".format(reward))
-            print("Observation: {} steps left".format(ob[0]))
+            print("Observation: {} steps left".format(ob))
             if done:
                 ob = env.reset()
-                print("Reset: {} steps left".format(ob[0]))
+                print("Reset: {} steps left".format(ob))
 
         print("Mean reward {:.2f} EUR".format(cum_reward / 10))
         print("Total reward {:.2f} EUR".format(cum_reward))
