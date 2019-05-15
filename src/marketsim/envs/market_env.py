@@ -26,23 +26,19 @@ class MarketEnv(gym.Env):
         self.MAX_TIME_STEPS = 4
         self.PRODUCT_PRICE = 0.5
 
-        # Create Simulation with environment parameters
-        self.market = simulation.IntradayMarket(
-            product_price=self.PRODUCT_PRICE, lead_time=self.MAX_TIME_STEPS
-        )
+        # TODO: Create Simulation with environment parameters
 
         # Environment state variables
         self.curr_step = 0
         self.done = False
 
-        # Define what the agent can do
+        # TODO: Define what the agent can do
         # Sell at 0.00 EUR, 0.10 Euro, ..., 2.00 Euro
-        self.action_space = spaces.Discrete(21)
+        self.action_space = None
 
-        # Observation is the remaining time
-        low = np.array([0.0])  # remaining_tries
-        high = np.array([self.MAX_TIME_STEPS])  # remaining_tries
-        self.observation_space = spaces.Box(low, high, dtype=np.float32)
+        # TODO: Define what the agent can observe
+        # Observation is the remaining timesteps
+        self.observation_space = None
 
     def step(self, action):
         """
@@ -77,23 +73,16 @@ class MarketEnv(gym.Env):
         if self.done:
             raise RuntimeError("Episode is done")
 
-        self.curr_step += 1
-
-        reward = self._take_action(action)
-        ob = self._get_state()
+        # TODO: Determine Observeration and Reward
 
         return ob, reward, self.done, {}
 
     def _take_action(self, action):
-        # Determine price from action
-        price = (float(self.MAX_PRICE) / (self.action_space.n - 1)) * action
+        # TODO: Determine price from action
 
-        # Interact with simulation
-        reward, sold = self.market.trade_offer(price)
+        # TODO: Interact with simulation
 
-        # When is episode done?
-        if sold or self.market.remaining_slots == 0:
-            self.done = True
+        # TODO: When is episode done?
 
         return reward
 
@@ -107,13 +96,15 @@ class MarketEnv(gym.Env):
         """
         self.curr_step = 0
         self.done = False
-        self.market.new_product()
+
+        # TODO: Reset Simulation
+
         return self._get_state()
 
     def _get_state(self):
         """Get the observation."""
-        ob = self.MAX_TIME_STEPS - self.curr_step
-        return [ob]
+        # TODO Return State observation
+        return [0]
 
     def seed(self, seed):
         random.seed(seed)
