@@ -1,12 +1,10 @@
 #!/usr/bin/env python
-from setuptools import find_packages, setup
+from setuptools import setup
 
 setup(
     name="marketsim",
     version="0.0.1",
-    packages=find_packages(where="marketsim"),
-    package_dir={"": "marketsim"},
-    include_package_data=True,
+    packages=["marketsim"],
     install_requires=[
         "keras-rl>=0.4.2",
         "gym>=0.2.3",
