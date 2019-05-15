@@ -9,6 +9,5 @@ setup(
         "gym>=0.2.3",
         "pandas>=0.23.4",
         "tensorflow>=1.13.0",
-        "cfg_load",
     ],
 )
