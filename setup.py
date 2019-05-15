@@ -4,6 +4,7 @@ from setuptools import setup
 setup(
     name="marketsim",
     version="0.0.1",
+    package_dir={"": "."},
     packages=["marketsim"],
     install_requires=[
         "keras-rl>=0.4.2",
