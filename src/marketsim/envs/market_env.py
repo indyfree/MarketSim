@@ -40,7 +40,9 @@ class MarketEnv(gym.Env):
         self.action_space = spaces.Discrete(21)
 
         # Observation is the remaining time
-        self.observation_space = spaces.Discrete(self.MAX_TIME_STEPS + 1)
+        low = np.array([0.0])  # remaining_tries
+        high = np.array([self.MAX_TIME_STEPS])  # remaining_tries
+        self.observation_space = spaces.Box(low, high, dtype=np.float32)
 
     def step(self, action):
         """
@@ -111,7 +113,7 @@ class MarketEnv(gym.Env):
     def _get_state(self):
         """Get the observation."""
         ob = self.MAX_TIME_STEPS - self.curr_step
-        return ob
+        return [ob]
 
     def seed(self, seed):
         random.seed(seed)
