@@ -57,6 +57,9 @@ class SimpleDQN:
             callbacks=[FileLogger("dqn_log.json")],
             log_interval=log_interval,
             nb_steps=steps,
+            enable_dueling_network=True,  # Enable dueling
+            dueling_type="avg",
+            enable_double_dqn=True,  # Enable double dqn
             verbose=1,
             visualize=False,
         )
