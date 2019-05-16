@@ -12,10 +12,10 @@ from rl.memory import SequentialMemory
 
 
 class SimpleDQN:
-    def __init__(self, observation_shape, nb_actions, eps_steps):
+    def __init__(self, nb_observations, nb_actions, eps_steps):
         # First, we build a very simple NN model.
         model = Sequential()
-        model.add(Flatten(input_shape=(1,) + observation_shape))
+        model.add(Dense(nb_observations))
         model.add(Dense(16))
         model.add(Activation("relu"))
         model.add(Dense(16))
